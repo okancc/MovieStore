@@ -17,6 +17,13 @@ builder.Services.AddDbContext<DatabaseContext>(options=>options.UseSqlServer(bui
 
 builder.Services.AddScoped<IUserAuthenticationService,UserAuthenticationService>();
 
+builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+
+
+
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DatabaseContext>()
