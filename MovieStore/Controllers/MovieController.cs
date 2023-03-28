@@ -6,7 +6,7 @@ using MovieStore.Repositories.Abstract;
 
 namespace MovieStore.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class MovieController : Controller
     {
         private readonly IMovieService _movieService;
