@@ -56,6 +56,12 @@ namespace MovieStore.Repositories.Implementation
                 if (data==null)
                 {
                     return false;
+                    
+                }
+                var movieGenres = ctx.MovieGenre.Where(a => a.MovieId == data.Id);
+                foreach (var movieGenre in movieGenres)
+                {
+                    ctx.MovieGenre.Remove(movieGenre);
                 }
                 ctx.Movie.Remove(data);
                 ctx.SaveChanges();
@@ -78,10 +84,19 @@ namespace MovieStore.Repositories.Implementation
 
         public MovieListVm List()
         {
-            var list = ctx.Movie.AsQueryable();
+
+            var list = ctx.Movie.ToList();
+
+            foreach (var movie in list)
+            {
+                var genres = (from genre in ctx.Genre join mg in ctx.MovieGenre on genre.Id equals mg.GenreId where mg.MovieId == movie.Id select genre.GenreName).ToList();
+                var genreNames = string.Join(',', genres);
+                movie.GenreNames = genreNames;
+            }
+
             var data = new MovieListVm
             {
-                MovieList = list
+                MovieList = list.AsQueryable(),
             };
 
             return data;
@@ -103,5 +118,11 @@ namespace MovieStore.Repositories.Implementation
             }
 
         }
+
+        public List<int> GetGenreByMovieId(int movieId)
+        {
+            var genreIds = ctx.MovieGenre.Where(a=> a.MovieId==movieId).Select(a => a.GenreId).ToList();
+            return genreIds;
+        } 
     }
 }

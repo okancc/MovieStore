@@ -17,6 +17,9 @@ namespace MovieStore.Repositories.Abstract
       MovieListVm List();
 
 
+        List<int> GetGenreByMovieId(int movieId); 
+
+
 
 
     }
