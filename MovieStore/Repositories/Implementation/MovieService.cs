@@ -107,7 +107,30 @@ namespace MovieStore.Repositories.Implementation
             try
 
             {
+                var genreToDeleted = ctx.MovieGenre.Where(a => a.MovieId == model.Id && !model.Genres.Contains(a.GenreId)).ToList();
+
+              
+                foreach (var mGenre in genreToDeleted)
+                {
+                  
+                    ctx.MovieGenre.Remove(mGenre);
+                }
+
+                foreach (int genId in model.Genres)
+                {
+                    var movieGenre = ctx.MovieGenre.FirstOrDefault(a => a.MovieId == model.Id && a.GenreId == genId);
+                    if (movieGenre == null)
+                    {
+                        movieGenre = new MovieGenre { GenreId = genId, MovieId = model.Id };
+                        ctx.MovieGenre.Add(movieGenre);
+                    }
+                }
+
+
                 ctx.Movie.Update(model);
+
+             
+
                 ctx.SaveChanges();
                 return true;
             }
