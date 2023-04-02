@@ -12,9 +12,9 @@ namespace MovieStore.Controllers
             _movieService = movieService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string term="", int currentPage = 1)
         {
-            var movies = _movieService.List();
+            var movies = _movieService.List(term,true,currentPage);
 
             return View(movies);
         }
